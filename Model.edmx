@@ -1,0 +1,268 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="LocalDBAuto.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Marka">
+          <Key>
+            <PropertyRef Name="Id_Marki" />
+          </Key>
+          <Property Name="Id_Marki" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Marka" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="Samochod">
+          <Key>
+            <PropertyRef Name="Id_Samochodu" />
+          </Key>
+          <Property Name="Id_Samochodu" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id_Marki" Type="int" />
+          <Property Name="Nazwa" Type="nchar" MaxLength="10" />
+          <Property Name="Rocznik" Type="int" />
+          <Property Name="Nadwozie" Type="nchar" MaxLength="10" />
+          <Property Name="Status" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Login" Type="nchar" MaxLength="10" />
+          <Property Name="Haslo" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="Wypozyczenie">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_osoby" Type="int" />
+          <Property Name="id_samochodu" Type="int" />
+          <Property Name="Data_Wyd" Type="date" />
+          <Property Name="Termin_Od" Type="date" />
+        </EntityType>
+        <Association Name="FK_Samochod_ToMarki">
+          <End Role="Marka" Type="Self.Marka" Multiplicity="0..1" />
+          <End Role="Samochod" Type="Self.Samochod" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Marka">
+              <PropertyRef Name="Id_Marki" />
+            </Principal>
+            <Dependent Role="Samochod">
+              <PropertyRef Name="Id_Marki" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Wypozyczenie_ToSamochod">
+          <End Role="Samochod" Type="Self.Samochod" Multiplicity="0..1" />
+          <End Role="Wypozyczenie" Type="Self.Wypozyczenie" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Samochod">
+              <PropertyRef Name="Id_Samochodu" />
+            </Principal>
+            <Dependent Role="Wypozyczenie">
+              <PropertyRef Name="id_samochodu" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Wypozyczenie_ToUser">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Wypozyczenie" Type="Self.Wypozyczenie" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Wypozyczenie">
+              <PropertyRef Name="id_osoby" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="LocalDBAutoStoreContainer">
+          <EntitySet Name="Marka" EntityType="Self.Marka" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Samochod" EntityType="Self.Samochod" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Wypozyczenie" EntityType="Self.Wypozyczenie" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Samochod_ToMarki" Association="Self.FK_Samochod_ToMarki">
+            <End Role="Marka" EntitySet="Marka" />
+            <End Role="Samochod" EntitySet="Samochod" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Wypozyczenie_ToSamochod" Association="Self.FK_Wypozyczenie_ToSamochod">
+            <End Role="Samochod" EntitySet="Samochod" />
+            <End Role="Wypozyczenie" EntitySet="Wypozyczenie" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Wypozyczenie_ToUser" Association="Self.FK_Wypozyczenie_ToUser">
+            <End Role="User" EntitySet="User" />
+            <End Role="Wypozyczenie" EntitySet="Wypozyczenie" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="LocalDBAuto" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Marka">
+          <Key>
+            <PropertyRef Name="Id_Marki" />
+          </Key>
+          <Property Name="Id_Marki" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Marka1" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Samochod" Relationship="Self.FK_Samochod_ToMarki" FromRole="Marka" ToRole="Samochod" />
+        </EntityType>
+        <EntityType Name="Samochod">
+          <Key>
+            <PropertyRef Name="Id_Samochodu" />
+          </Key>
+          <Property Name="Id_Samochodu" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id_Marki" Type="Int32" />
+          <Property Name="Nazwa" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Rocznik" Type="Int32" />
+          <Property Name="Nadwozie" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Status" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Marka" Relationship="Self.FK_Samochod_ToMarki" FromRole="Samochod" ToRole="Marka" />
+          <NavigationProperty Name="Wypozyczenie" Relationship="Self.FK_Wypozyczenie_ToSamochod" FromRole="Samochod" ToRole="Wypozyczenie" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Login" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Haslo" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Wypozyczenie" Relationship="Self.FK_Wypozyczenie_ToUser" FromRole="User" ToRole="Wypozyczenie" />
+        </EntityType>
+        <EntityType Name="Wypozyczenie">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_osoby" Type="Int32" />
+          <Property Name="id_samochodu" Type="Int32" />
+          <Property Name="Data_Wyd" Type="DateTime" Precision="0" />
+          <Property Name="Termin_Od" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Samochod" Relationship="Self.FK_Wypozyczenie_ToSamochod" FromRole="Wypozyczenie" ToRole="Samochod" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Wypozyczenie_ToUser" FromRole="Wypozyczenie" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_Samochod_ToMarki">
+          <End Role="Marka" Type="Self.Marka" Multiplicity="0..1" />
+          <End Role="Samochod" Type="Self.Samochod" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Marka">
+              <PropertyRef Name="Id_Marki" />
+            </Principal>
+            <Dependent Role="Samochod">
+              <PropertyRef Name="Id_Marki" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Wypozyczenie_ToSamochod">
+          <End Role="Samochod" Type="Self.Samochod" Multiplicity="0..1" />
+          <End Role="Wypozyczenie" Type="Self.Wypozyczenie" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Samochod">
+              <PropertyRef Name="Id_Samochodu" />
+            </Principal>
+            <Dependent Role="Wypozyczenie">
+              <PropertyRef Name="id_samochodu" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Wypozyczenie_ToUser">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Wypozyczenie" Type="Self.Wypozyczenie" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Wypozyczenie">
+              <PropertyRef Name="id_osoby" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="LocalDBEntitiesAuto" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Marka" EntityType="Self.Marka" />
+          <EntitySet Name="Samochod" EntityType="Self.Samochod" />
+          <EntitySet Name="User" EntityType="Self.User" />
+          <EntitySet Name="Wypozyczenie" EntityType="Self.Wypozyczenie" />
+          <AssociationSet Name="FK_Samochod_ToMarki" Association="Self.FK_Samochod_ToMarki">
+            <End Role="Marka" EntitySet="Marka" />
+            <End Role="Samochod" EntitySet="Samochod" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Wypozyczenie_ToSamochod" Association="Self.FK_Wypozyczenie_ToSamochod">
+            <End Role="Samochod" EntitySet="Samochod" />
+            <End Role="Wypozyczenie" EntitySet="Wypozyczenie" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Wypozyczenie_ToUser" Association="Self.FK_Wypozyczenie_ToUser">
+            <End Role="User" EntitySet="User" />
+            <End Role="Wypozyczenie" EntitySet="Wypozyczenie" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="LocalDBAutoStoreContainer" CdmEntityContainer="LocalDBEntitiesAuto">
+          <EntitySetMapping Name="Marka">
+            <EntityTypeMapping TypeName="LocalDBAuto.Marka">
+              <MappingFragment StoreEntitySet="Marka">
+                <ScalarProperty Name="Id_Marki" ColumnName="Id_Marki" />
+                <ScalarProperty Name="Marka1" ColumnName="Marka" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Samochod">
+            <EntityTypeMapping TypeName="LocalDBAuto.Samochod">
+              <MappingFragment StoreEntitySet="Samochod">
+                <ScalarProperty Name="Id_Samochodu" ColumnName="Id_Samochodu" />
+                <ScalarProperty Name="Id_Marki" ColumnName="Id_Marki" />
+                <ScalarProperty Name="Nazwa" ColumnName="Nazwa" />
+                <ScalarProperty Name="Rocznik" ColumnName="Rocznik" />
+                <ScalarProperty Name="Nadwozie" ColumnName="Nadwozie" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User">
+            <EntityTypeMapping TypeName="LocalDBAuto.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="Haslo" ColumnName="Haslo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Wypozyczenie">
+            <EntityTypeMapping TypeName="LocalDBAuto.Wypozyczenie">
+              <MappingFragment StoreEntitySet="Wypozyczenie">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="id_osoby" ColumnName="id_osoby" />
+                <ScalarProperty Name="id_samochodu" ColumnName="id_samochodu" />
+                <ScalarProperty Name="Data_Wyd" ColumnName="Data_Wyd" />
+                <ScalarProperty Name="Termin_Od" ColumnName="Termin_Od" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
